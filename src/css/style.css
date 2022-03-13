@@ -1,0 +1,11 @@
+body {
+  width: 375px;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.btn,
+#actorCompanyIdInput {
+  margin-bottom: 16px;
+  width: 100%;
+}
