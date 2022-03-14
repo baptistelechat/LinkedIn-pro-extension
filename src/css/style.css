@@ -9,3 +9,7 @@ body {
   margin-bottom: 16px;
   width: 100%;
 }
+
+#actorCompanyIdInput {
+  width: 150px;
+}

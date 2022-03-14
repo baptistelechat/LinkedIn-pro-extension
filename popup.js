@@ -1,4 +1,5 @@
 const admin = document.getElementById("goToAdminPage");
+const openWithLkPersoPage = document.getElementById("openWithLkPersoPage");
 const openWithLkProPage = document.getElementById("openWithLkProPage");
 const currentActorCompanyId = document.getElementById("currentActorCompanyId");
 const input = document.getElementById("actorCompanyIdInput");
@@ -24,6 +25,33 @@ const setIcons = (img) => {
   chrome.action.setIcon({ path: img });
 };
 
+const isLinkedInProPage = async () => {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
+    if (
+      actorCompanyId === "12345678" ||
+      !tab.url.includes("https://www.linkedin.com/")
+    ) {
+      openWithLkProPage.classList.add("disabled");
+      openWithLkPersoPage.classList.add("disabled");
+    } else if (tab.url.includes("?actorCompanyId=")) {
+      openWithLkProPage.classList.add("disabled");
+      openWithLkPersoPage.classList.remove("disabled");
+    } else if (
+      tab.url.includes(
+        "/?utm_source=linkedin_share&utm_medium=member_desktop_web"
+      )
+    ) {
+      openWithLkProPage.classList.remove("disabled");
+      openWithLkPersoPage.classList.add("disabled");
+    } else {
+      openWithLkProPage.classList.add("disabled");
+      openWithLkPersoPage.classList.add("disabled");
+    }
+  });
+};
+
 admin.addEventListener("click", () => {
   chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
     chrome.tabs.create({
@@ -44,6 +72,23 @@ openWithLkProPage.addEventListener("click", async () => {
       const newUrl = `${url}?actorCompanyId=${actorCompanyId}`;
       chrome.tabs.update(id, { url: newUrl });
     });
+    openWithLkProPage.classList.add("disabled");
+    openWithLkPersoPage.classList.remove("disabled");
+  });
+});
+
+openWithLkPersoPage.addEventListener("click", async () => {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  const id = tab.id;
+  const url = tab.url.split("?actorCompanyId=")[0];
+  chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
+    chrome.tabs.get(id, async (tab) => {
+      const newUrl = `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`;
+      chrome.tabs.update(id, { url: newUrl });
+    });
+    openWithLkProPage.classList.remove("disabled");
+    openWithLkPersoPage.classList.add("disabled");
   });
 });
 
@@ -51,7 +96,7 @@ submit.addEventListener("click", () => {
   if (input.value.length === 8) {
     setIcons(active);
     admin.classList.remove("disabled");
-    openWithLkProPage.classList.remove("disabled");
+    isLinkedInProPage();
     const actorCompanyId = input.value;
     chrome.storage.sync.set({ actorCompanyId });
     currentActorCompanyId.innerText = "Identifiant actuel : " + actorCompanyId;
@@ -107,3 +152,5 @@ chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
     openWithLkProPage.classList.add("disabled");
   }
 });
+
+isLinkedInProPage();
