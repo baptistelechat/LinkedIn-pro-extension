@@ -41,7 +41,8 @@ const isLinkedInProPage = async () => {
     } else if (
       tab.url.includes(
         "/?utm_source=linkedin_share&utm_medium=member_desktop_web"
-      )
+      ) ||
+      tab.url.includes("/feed/update/urn:li:activity:")
     ) {
       openWithLkProPage.classList.remove("disabled");
       openWithLkPersoPage.classList.add("disabled");
@@ -84,7 +85,13 @@ openWithLkPersoPage.addEventListener("click", async () => {
   const url = tab.url.split("?actorCompanyId=")[0];
   chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
     chrome.tabs.get(id, async (tab) => {
-      const newUrl = `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`;
+      const newUrl = tab.url.includes(
+        "/?utm_source=linkedin_share&utm_medium=member_desktop_web"
+      )
+        ? `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`
+        : tab.url.includes("/feed/update/urn:li:activity:")
+        ? url
+        : `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`;
       chrome.tabs.update(id, { url: newUrl });
     });
     openWithLkProPage.classList.remove("disabled");
