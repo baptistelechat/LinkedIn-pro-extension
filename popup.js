@@ -85,11 +85,7 @@ openWithLkPersoPage.addEventListener("click", async () => {
   const url = tab.url.split("?actorCompanyId=")[0];
   chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
     chrome.tabs.get(id, async (tab) => {
-      const newUrl = tab.url.includes(
-        "/?utm_source=linkedin_share&utm_medium=member_desktop_web"
-      )
-        ? `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`
-        : tab.url.includes("/feed/update/urn:li:activity:")
+      const newUrl = tab.url.includes("/feed/update/urn:li:activity:")
         ? url
         : `${url}/?utm_source=linkedin_share&utm_medium=member_desktop_web`;
       chrome.tabs.update(id, { url: newUrl });
