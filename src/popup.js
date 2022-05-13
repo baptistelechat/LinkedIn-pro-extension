@@ -6,20 +6,20 @@ const input = document.getElementById("actorCompanyIdInput");
 const submit = document.getElementById("actorCompanyIdSubmit");
 
 const active = {
-  16: "./src/images/active/active-16.png",
-  32: "./src/images/active/active-32.png",
-  48: "./src/images/active/active-48.png",
-  128: "./src/images/active/active-128.png",
+  16: "./icons/active/active-16.png",
+  32: "./icons/active/active-32.png",
+  48: "./icons/active/active-48.png",
+  128: "./icons/active/active-128.png",
 };
-activeNotification = "./src/images/active/active.png";
+activeNotification = "./icons/active/active.png";
 
 const error = {
-  16: "./src/images/error/error-16.png",
-  32: "./src/images/error/error-32.png",
-  48: "./src/images/error/error-48.png",
-  128: "./src/images/error/error-128.png",
+  16: "./icons/error/error-16.png",
+  32: "./icons/error/error-32.png",
+  48: "./icons/error/error-48.png",
+  128: "./icons/error/error-128.png",
 };
-errorNotification = "./src/images/error/error.png";
+errorNotification = "./icons/error/error.png";
 
 const setIcons = (img) => {
   chrome.action.setIcon({ path: img });

@@ -1,7 +1,7 @@
 const actorCompanyId = "12345678";
 
-const powerOn = "./src/images/power-on-38.png";
-const powerOff = "./src/images/power-off-38.png";
+const powerOn = "./icons/active/active-32.png";
+const powerOff = "./icons/error/error-32.png";
 
 const setIcons = (path) => {
   chrome.action.setIcon({ path: path });
