@@ -1,9 +1,12 @@
+import { lkscrapper } from "../public/js/lkscrapper";
+
 const admin = document.getElementById("goToAdminPage");
 const openWithLkPersoPage = document.getElementById("openWithLkPersoPage");
 const openWithLkProPage = document.getElementById("openWithLkProPage");
 const currentActorCompanyId = document.getElementById("currentActorCompanyId");
 const input = document.getElementById("actorCompanyIdInput");
 const submit = document.getElementById("actorCompanyIdSubmit");
+const exportSubscribers = document.getElementById("exportSubscribers");
 
 const active = {
   16: "./icons/active/active-16.png",
@@ -11,7 +14,7 @@ const active = {
   48: "./icons/active/active-48.png",
   128: "./icons/active/active-128.png",
 };
-activeNotification = "./icons/active/active.png";
+const activeNotification = "./icons/active/active-32.png";
 
 const error = {
   16: "./icons/error/error-16.png",
@@ -19,7 +22,7 @@ const error = {
   48: "./icons/error/error-48.png",
   128: "./icons/error/error-128.png",
 };
-errorNotification = "./icons/error/error.png";
+const errorNotification = "./icons/error/error-32.png";
 
 const setIcons = (img) => {
   chrome.action.setIcon({ path: img });
@@ -35,9 +38,11 @@ const isLinkedInProPage = async () => {
     ) {
       openWithLkProPage.classList.add("disabled");
       openWithLkPersoPage.classList.add("disabled");
+      exportSubscribers.classList.add("disabled");
     } else if (tab.url.includes("?actorCompanyId=")) {
       openWithLkProPage.classList.add("disabled");
       openWithLkPersoPage.classList.remove("disabled");
+      exportSubscribers.classList.add("disabled");
     } else if (
       tab.url.includes(
         "/?utm_source=linkedin_share&utm_medium=member_desktop_web"
@@ -46,9 +51,15 @@ const isLinkedInProPage = async () => {
     ) {
       openWithLkProPage.classList.remove("disabled");
       openWithLkPersoPage.classList.add("disabled");
+      exportSubscribers.classList.add("disabled");
+    } else if (tab.url.includes("/admin/analytics/followers")) {
+      openWithLkProPage.classList.add("disabled");
+      openWithLkPersoPage.classList.add("disabled");
+      exportSubscribers.classList.remove("disabled");
     } else {
       openWithLkProPage.classList.add("disabled");
       openWithLkPersoPage.classList.add("disabled");
+      exportSubscribers.classList.add("disabled");
     }
   });
 };
@@ -141,6 +152,17 @@ chrome.notifications.onClicked.addListener(() => {
         url: `https://www.linkedin.com/company/${actorCompanyId}/admin/`,
       });
     }
+  });
+});
+
+exportSubscribers.addEventListener("click", async () => {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  const id = tab.id;
+  console.log("exportSubscribers");
+  chrome.scripting.executeScript({
+    target: { tabId: id, allFrames: true },
+    files: ["./js/lkscrapper.js"],
   });
 });
 
