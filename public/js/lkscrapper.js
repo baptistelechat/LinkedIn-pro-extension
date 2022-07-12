@@ -100,6 +100,9 @@ const lkscrapper = async () => {
   );
 
   const pageScroll = async () => {
+    // chrome.storage.sync.get("marginSubscriber", ({ marginSubscriber }) => {
+      
+    // });
     modal.scrollBy(0, 50);
     const list = document.querySelectorAll(
       ".org-view-page-followers-modal__table-row"

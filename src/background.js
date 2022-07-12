@@ -1,4 +1,5 @@
 const actorCompanyId = "12345678";
+const marginSubscriber = 0;
 
 const powerOn = "./icons/active/active-32.png";
 const powerOff = "./icons/error/error-32.png";
@@ -18,6 +19,8 @@ chrome.runtime.onInstalled.addListener((reason) => {
   }
   chrome.storage.sync.set({ actorCompanyId });
   console.log(`Default actorCompanyId set to ${actorCompanyId}`);
+  chrome.storage.sync.set({ marginSubscriber });
+  console.log(`Offset set to ${marginSubscriber}`);
 });
 
 chrome.runtime.onStartup.addListener(() => {

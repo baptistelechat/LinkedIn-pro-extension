@@ -7,6 +7,7 @@ const currentActorCompanyId = document.getElementById("currentActorCompanyId");
 const input = document.getElementById("actorCompanyIdInput");
 const submit = document.getElementById("actorCompanyIdSubmit");
 const exportSubscribers = document.getElementById("exportSubscribers");
+const inputMarginSubscriber = document.getElementById("marginSubscriberInput");
 
 const active = {
   16: "./icons/active/active-16.png",
@@ -164,6 +165,11 @@ exportSubscribers.addEventListener("click", async () => {
     target: { tabId: id, allFrames: true },
     files: ["./js/lkscrapper.js"],
   });
+});
+
+inputMarginSubscriber.addEventListener("change", () => {
+  const marginSubscriber = inputMarginSubscriber.value;
+  chrome.storage.sync.set({ marginSubscriber });
 });
 
 chrome.storage.sync.get("actorCompanyId", ({ actorCompanyId }) => {
